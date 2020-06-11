@@ -1,0 +1,14 @@
+.numfont {
+	font-family: 'Major Mono Display', monospace;
+	font-size: 40px;
+	-webkit-box-reflect: below 10px -webkit-gradient(linear, right top, right bottom, from(transparent), to(rgba(255, 255, 255, 0.4)));
+}
+
+.border {
+	border: 2px solid grey;
+}
+
+.timerbtn {
+	display: flex;
+	justify-content: center
+}

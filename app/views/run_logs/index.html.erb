@@ -1,0 +1,32 @@
+<!-- <p id="notice"><%= notice %></p>
+
+<h1>Run Logs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Distance</th>
+      <th>Speed</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @run_logs.each do |run_log| %>
+      <tr>
+        <td><%= run_log.distance %></td>
+        <td><%= run_log.speed %></td>
+        <td><%= run_log.user_id %></td>
+        <td><%= link_to 'Show', run_log %></td>
+        <td><%= link_to 'Edit', edit_run_log_path(run_log) %></td>
+        <td><%= link_to 'Destroy', run_log, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Run Log', new_run_log_path %> -->
+<%= javascript_pack_tag 'hello_react' %>
