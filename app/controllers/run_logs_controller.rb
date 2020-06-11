@@ -15,6 +15,7 @@ class RunLogsController < ApplicationController
   # GET /run_logs/new
   def new
     @run_log = RunLog.new
+
   end
 
   # GET /run_logs/1/edit

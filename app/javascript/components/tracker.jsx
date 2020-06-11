@@ -11,7 +11,7 @@ class Tracker extends React.Component {
     this.state = {
       lat: [],
       long: [],
-      distance:0,
+      distance:100,
       templat:'',
       templong:'',
       counter:0,
@@ -74,7 +74,6 @@ class Tracker extends React.Component {
     console.log('statelong')
     console.log(this.state.templong)
 
-
     if(this.state.templat && latitude){
         this.distance(latitude, longitude, this.state.templat, this.state.templong, "K")
       }
@@ -128,6 +127,14 @@ class Tracker extends React.Component {
     this.stop()
   }
 
+  putSaveTime(){
+    this.stop()
+    this.props.liftSaveDistance(this.state.distance)
+    this.setState({
+      distance:0,
+    })
+  }
+
     render() {
       let Lat = this.state.lat.map((elem)=> {
         return(
@@ -139,14 +146,11 @@ class Tracker extends React.Component {
       })
     return (
       <div>
-
           For testing purpose:<br/>
           lat1: &nbsp;<input id='lat1'></input><br/>
           long1:<input id='lon1'></input><br/>
           lat2: &nbsp;<input id='lat2'></input><br/>
           long2:<input id='lon2'></input>
-
-
         <br/>
         <Grid container justify='center'>
           <button onClick={(event)=>{this.calc(event)}}>submit</button>

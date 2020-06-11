@@ -14,7 +14,7 @@ class Timer extends React.Component {
     }
     this.startTimer = this.startTimer.bind(this)
     this.stopTimer = this.stopTimer.bind(this)
-    this.resetTimer = this.resetTimer.bind(this)
+    this.saveTimer = this.saveTimer.bind(this)
   }
   startTimer() {
     this.props.liftStartTime()
@@ -32,8 +32,12 @@ class Timer extends React.Component {
     this.setState({isOn: false})
     clearInterval(this.timer)
   }
-  resetTimer() {
+  saveTimer() {
+    this.props.liftSaveTime(this.state.time)
     this.setState({time: 0, isOn: false})
+  }
+  saveDistance(){
+
   }
   render() {
     let start = (this.state.time == 0) ?
@@ -45,9 +49,9 @@ class Timer extends React.Component {
     let resume = (this.state.time == 0 || this.state.isOn) ?
       null :
       <Button style={{border:'1px solid black', borderRadius:'40px', width:'120px', marginRight:'3px', maxWidth:'200px'}} onClick={this.startTimer}>resume</Button>
-    let reset = (this.state.time == 0 || this.state.isOn) ?
+    let save = (this.state.time == 0 || this.state.isOn) ?
       null :
-      <Button style={{border:'1px solid black', borderRadius:'40px', width:'120px', marginLeft:'3px', maxWidth:'200px'}} onClick={this.resetTimer}>reset</Button>
+      <Button style={{border:'1px solid black', borderRadius:'40px', width:'120px', marginLeft:'3px', maxWidth:'200px'}} onClick={this.saveTimer}>save</Button>
     return(
       <div style={{marginTop:'100px'}}>
         <Grid container justify='center' className='numfont'style={{height:'26px'}}>
@@ -61,7 +65,7 @@ class Timer extends React.Component {
           {start}
           {resume}
           {stop}
-          {reset}
+          {save}
         </div>
       </div>
     )
