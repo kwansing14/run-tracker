@@ -2,6 +2,7 @@ import React from 'react';
 import Timer from './timer';
 import Tracker from './tracker';
 import style from './style'
+import Runlogs from './runlogs'
 
 //material UI stuff
 import Grid from '@material-ui/core/Grid';
@@ -27,21 +28,21 @@ class App extends React.Component {
 
   liftSaveTime(v){
     console.log('time is'+v)
-    this.refs.putTracker.putSaveTime();
+    let object = {
+      time:v,
+      distance:0
+    }
+    this.refs.putTracker.putSaveTime(object);
     this.setState({
       time:v
     })
   }
 
-  liftSaveDistance(v){
-    console.log('distance is'+v)
-    this.setState({
-      distance:v
-    })
+  liftSaveDistance(object){
+    this.refs.putrunlogs.postrequest(object);
   }
 
   render() {
-
     console.log('this.state.time')
     console.log(this.state.time)
     console.log('this.state.distance')
@@ -59,6 +60,10 @@ class App extends React.Component {
           <Tracker
             ref='putTracker'
             liftSaveDistance={(v)=>{this.liftSaveDistance(v)}}/>
+        </Grid>
+        <Grid container justify='center'>
+          <Runlogs
+            ref='putrunlogs'/>
         </Grid>
       </Grid>
     );

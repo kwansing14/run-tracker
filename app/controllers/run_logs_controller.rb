@@ -1,5 +1,7 @@
 class RunLogsController < ApplicationController
   before_action :set_run_log, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token
 
   # GET /run_logs
   # GET /run_logs.json
@@ -15,7 +17,6 @@ class RunLogsController < ApplicationController
   # GET /run_logs/new
   def new
     @run_log = RunLog.new
-
   end
 
   # GET /run_logs/1/edit
@@ -26,11 +27,13 @@ class RunLogsController < ApplicationController
   # POST /run_logs.json
   def create
     @run_log = RunLog.new(run_log_params)
+    @run_log.user = current_user
 
     respond_to do |format|
       if @run_log.save
         format.html { redirect_to @run_log, notice: 'Run log was successfully created.' }
         format.json { render :show, status: :created, location: @run_log }
+        return
       else
         format.html { render :new }
         format.json { render json: @run_log.errors, status: :unprocessable_entity }
@@ -70,6 +73,6 @@ class RunLogsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def run_log_params
-      params.require(:run_log).permit(:distance, :speed, :user_id)
+      params.require(:run_log).permit(:distance, :time)
     end
 end

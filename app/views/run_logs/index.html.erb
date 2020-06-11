@@ -1,32 +1,14 @@
-<!-- <p id="notice"><%= notice %></p>
+<!-- login/logout -->
+<% if user_signed_in? %>
+	<!-- first subheader -->
+	<div class="divider"></div>
+    <%= link_to 'Log out', destroy_user_session_url, method: :delete %>
 
-<h1>Run Logs</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Distance</th>
-      <th>Speed</th>
-      <th>User</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @run_logs.each do |run_log| %>
-      <tr>
-        <td><%= run_log.distance %></td>
-        <td><%= run_log.speed %></td>
-        <td><%= run_log.user_id %></td>
-        <td><%= link_to 'Show', run_log %></td>
-        <td><%= link_to 'Edit', edit_run_log_path(run_log) %></td>
-        <td><%= link_to 'Destroy', run_log, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Run Log', new_run_log_path %> -->
+<% else %>
+  <!-- first subheader -->
+ <div class="divider"></div>
+ <a class="subheader">Login/sign up</a>
+<%= link_to 'Log in', new_user_session_url, :class => "waves-effect" %>
+<%= link_to "Sign up", new_user_registration_path, :class => "waves-effect" %>
+<% end %>
 <%= javascript_pack_tag 'hello_react' %>

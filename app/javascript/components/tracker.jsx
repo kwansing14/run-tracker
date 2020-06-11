@@ -19,7 +19,6 @@ class Tracker extends React.Component {
   }
 
   calc(event){
-    debugger
     let a = document.getElementById("lat1").value;
     let b = document.getElementById("lon1").value;
     let c = document.getElementById("lat2").value;
@@ -127,9 +126,10 @@ class Tracker extends React.Component {
     this.stop()
   }
 
-  putSaveTime(){
+  putSaveTime(object){
     this.stop()
-    this.props.liftSaveDistance(this.state.distance)
+    object.distance = this.state.distance
+    this.props.liftSaveDistance(object)
     this.setState({
       distance:0,
     })
