@@ -5,10 +5,27 @@
 }
 
 .border {
-	border: 2px solid grey;
+	border: 1px solid grey;
 }
 
 .timerbtn {
 	display: flex;
-	justify-content: center
+	justify-content: center;
+}
+
+.bb{
+	border-bottom: 2px solid black;
+	width:100%;
+	text-align: center;
+}
+.btmm{
+	margin-bottom:20px;
+}
+
+.stats{
+	height:70px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size:20px;
 }

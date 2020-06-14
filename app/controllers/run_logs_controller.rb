@@ -6,7 +6,7 @@ class RunLogsController < ApplicationController
   # GET /run_logs
   # GET /run_logs.json
   def index
-    @run_logs = RunLog.all
+    @run_logs = RunLog.where(user_id: (current_user.id))
   end
 
   # GET /run_logs/1

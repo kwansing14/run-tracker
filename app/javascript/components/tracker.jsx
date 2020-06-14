@@ -1,20 +1,26 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
+import ms from 'parse-ms';
 
 let watchID = null;
-let counter = 0;
+let counter = 1;
 
 class Tracker extends React.Component {
 
   constructor(){
     super()
     this.state = {
-      lat: [],
-      long: [],
-      distance:100,
+      distance:0,
       templat:'',
       templong:'',
-      counter:0,
+      counter:1,
+      testing:false,
+      pacer:0,
+      currentPace:0,
+      tempDist:0,
     }
   }
 
@@ -48,10 +54,8 @@ class Tracker extends React.Component {
         if (unit=="N") { dist = dist * 0.8684 }
         console.log('distannceeeeeee'+dist)
         dist = this.state.distance + dist;
-        counter++;
         this.setState ({
           distance:dist,
-          counter:counter,
         })
         console.log("distance check done")
         //return dist;
@@ -61,8 +65,8 @@ class Tracker extends React.Component {
   // to get update location
   showLocation(position) {
     console.log("watching......")
-    let latitude = position.coords.latitude;
-    let longitude = position.coords.longitude;
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
     //alert("Latitude : " + latitude + " Longitude: " + longitude);
     console.log('latitude')
     console.log(latitude)
@@ -72,14 +76,9 @@ class Tracker extends React.Component {
     console.log(this.state.templat)
     console.log('statelong')
     console.log(this.state.templong)
-
     if(this.state.templat && latitude){
         this.distance(latitude, longitude, this.state.templat, this.state.templong, "K")
       }
-    // this.setState({
-    //   lat:[latitude, ...this.state.lat],
-    //   long:[longitude, ...this.state.long]
-    // })
     this.setState({
       templat: latitude,
       templong: longitude
@@ -94,24 +93,27 @@ class Tracker extends React.Component {
       alert("Error: Position is unavailable!");
     }
   }
+
   updateloc(event){
     console.log("once?")
-    if(navigator.geolocation){
-      // timeout at 60000 milliseconds (60 seconds)
+    if(navigator.geolocation) {
       var options = {
         timeout:Infinity,
         enableHighAccuracy: true};
       let geoLoc = navigator.geolocation;
       watchID = geoLoc.watchPosition(
         (position)=>{this.showLocation(position)},
-        (err)=>{this.errorHandler(err)},
-        options)
+        (err)=>{this.errorHandler(err)},options)
     } else {
       alert("Sorry, browser does not support geolocation!");
     }
   }
 
   stop(event){
+    this.setState({
+      templat:'',
+      templong:'',
+    })
     if(watchID){
       navigator.geolocation.clearWatch(watchID);
       console.log("stop successful")
@@ -129,47 +131,101 @@ class Tracker extends React.Component {
   putSaveTime(object){
     this.stop()
     object.distance = this.state.distance
+    console.log(object)
     this.props.liftSaveDistance(object)
     this.setState({
       distance:0,
+      pacer:0,
+      currentPace:0,
+      templat:'',
+      templong:'',
+      tempDist:0,
+      counter: 0,
     })
   }
 
+  putpacer(v){
+    //v is milliseconds of every 10 seconds, time can be changed in timer.jsx
+    console.log('putpacer'+v)
+
+    //calculate average pace
+    let x = (1/this.state.distance)*(v*(this.state.counter))
+    console.log(this.state.counter)
+    this.setState({
+      pacer:x,
+      counter: this.state.counter+1})
+
+    //calculate current pace
+    let y = (1/(this.state.distance - this.state.tempDist))*v
+        if (y == Infinity) {
+      y = 0;
+    }
+    this.setState({
+      tempDist: this.state.distance,
+      currentPace: y,
+    })
+  }
+
+  testing(){
+    if (this.state.testing == true) {
+      this.setState({testing:false})
+    }
+    else { this.setState({testing:true}) }
+  }
+
     render() {
-      let Lat = this.state.lat.map((elem)=> {
-        return(
-          <div>{elem}</div>)
-        })
-      let Long = this.state.long.map((elem)=>{
-        return(
-          <div>{elem}</div>)
-      })
+      let cP = ms(this.state.currentPace)
+      let aP = ms(this.state.pacer)
+      if(this.state.currentPace == 0) {
+        cP.minutes = 0;
+        cP.seconds = '00';
+      }
+
+      if(this.state.pacer == Infinity || this.state.pacer == 0){
+        aP.minutes = 0;
+        aP.seconds = '00';
+      }
+      if (aP.seconds.length == 1) {
+        aP.seconds = "0"+aP.seconds
+      }
+      if (cP.seconds.length == 1) {
+        cP.seconds = "0"+cP.seconds
+      }
+
     return (
-      <div>
-          For testing purpose:<br/>
-          lat1: &nbsp;<input id='lat1'></input><br/>
-          long1:<input id='lon1'></input><br/>
-          lat2: &nbsp;<input id='lat2'></input><br/>
-          long2:<input id='lon2'></input>
-        <br/>
-        <Grid container justify='center'>
-          <button onClick={(event)=>{this.calc(event)}}>submit</button>
-          <button onClick={(event)=>{this.updateloc(event)}}>updateloc</button>
-          <button onClick={(event)=>{this.stop(event)}}>stop</button>
+      <Grid container spacing={0} style={{maxWidth:'210px',marginTop:'30px'}}>
+        <Grid item xs={12}>
+          <div>
+            <span className='bb' style={{padding:'2px'}}>Distance</span>
+          </div>
+          <Grid container className='stats'>
+            <Grid item xs={3}></Grid>
+            <Grid item xs={6} style={{textAlign:'center'}}>{(this.state.distance).toFixed(2)}</Grid>
+            <Grid item xs={3}><span style={{fontSize:'12px'}}>km</span></Grid>
+          </Grid>
         </Grid>
-        <div>
-          lat: {Lat}
-        </div>
-        <div>
-          long: {Long}
-        </div>
-        <div>
-          counter: {this.state.counter}
-        </div>
-        <div>
-          distance: {this.state.distance}
-        </div>
-      </div>
+        <Grid item xs={12}>
+          <div>
+            <span className='bb' style={{padding:'2px'}}>Current pace</span>
+          </div>
+          <Grid container className='stats'>
+            <Grid item xs={3}></Grid>
+            <Grid item xs={6} style={{textAlign:'center'}}>{cP.minutes}.{cP.seconds}</Grid>
+            <Grid item xs={3}><span style={{fontSize:'12px'}}>min/km</span></Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <div>
+            <span className='bb' style={{padding:'2px'}}>Average pace</span>
+          </div>
+
+          <Grid container className='stats'>
+            <Grid item xs={3}></Grid>
+            <Grid item xs={6} style={{textAlign:'center'}}>{aP.minutes}.{aP.seconds}</Grid>
+            <Grid item xs={3}><span style={{fontSize:'12px'}}>min/km</span></Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     );
   }
 }

@@ -1,6 +1,12 @@
 import React from 'react';
 import axios from 'axios';
+import ms from 'pretty-ms';
+
 import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import CloseIcon from '@material-ui/icons/Close';
 
 class Runlogs extends React.Component {
 
@@ -9,6 +15,7 @@ class Runlogs extends React.Component {
     this.state={
       logs:[],
       temp:[],
+      pace:0,
     }
   }
 
@@ -17,32 +24,21 @@ class Runlogs extends React.Component {
     const url = '/run_logs.json';
     axios.get(url)
       .then((response) => {
-        const data = response.data
-        this.setState({ logs: data })
+        this.setState({ logs: response.data })
       }).catch((error)=>{
         console.log(error);
       })
   }
 
-  // postrequest(object){
-  //   axios.post('/run_logs.json', object)
-  //   .then(function (response) {
-  //     console.log(response);
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   })
-  // }
-
+  //axios save and post each run logs
   postrequest = async(object) => {
     let res = await axios.post('/run_logs.json', object)
     this.componentDidMount();
   }
 
-  delbtn = async() =>{
-    console.log('deleting.')
-    console.log(event.target.value)
-    let res = await axios.delete("/run_logs/"+event.target.value+".json")
+  //axios deleting each logs
+  delbtn = async(event) =>{
+    let res = await axios.delete("/run_logs/"+event.currentTarget.id+".json")
     this.componentDidMount();
   }
 
@@ -52,17 +48,27 @@ class Runlogs extends React.Component {
     if(this.state.logs != undefined) {
       logs = this.state.logs.map((log, index)=>{
         return (
-          <div key={log.id}>
-            <div>time: {log.time}</div>
-            <div>distance: {log.distance}</div>
-            <button  value={log.id} onClick={()=>{this.delbtn()}}>del</button>
-          </div>);
+          <span key={log.id}>
+            <ListItem disableRipple button style={{width:'100%'}}>
+              <Grid item xs={2}>{index+1}.
+              </Grid>
+              <Grid item xs={9}>
+                <div>time: {ms(log.time)}</div>
+                <div>distance: {(log.distance).toFixed(2)}Km</div>
+              </Grid>
+              <Grid item xs={1} container justify='flex-end'>
+                <Button style={{minWidth: '30px'}}id={log.id} onClick={(event)=>{this.delbtn(event)}}><CloseIcon fontSize="small" /></Button>
+              </Grid>
+            </ListItem>
+            <Divider/>
+          </span>
+          );
       });
     }
 
     return (
       <div>
-        hello world
+        <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px', margin:'10px 2px'}}>Running Logs</div>
         {logs}
       </div>
     );
