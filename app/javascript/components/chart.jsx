@@ -35,7 +35,7 @@ class Chart extends React.Component {
 
 
   const renderLineChart = (
-    <LineChart width={300} height={170} data={this.state.data2} style={{marginTop:'5px',transform:'translateX(-25px)'}}>
+    <LineChart width={300} height={170} data={this.state.data2} style={{marginTop:'5px',transform:'translateX(-15px)'}}>
       <Line type="monotone" dataKey="pace" stroke="#8884d8" />
       <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
       <XAxis dataKey="id" />
@@ -44,7 +44,7 @@ class Chart extends React.Component {
   );
 
   const renderLineChart2 = (
-    <LineChart width={300} height={170} data={this.state.data2} style={{marginTop:'5px',transform:'translateX(-25px)'}}>
+    <LineChart width={300} height={170} data={this.state.data2} style={{marginTop:'5px',transform:'translateX(-15px)'}}>
       <Line type="monotone" dataKey="distance" stroke="#8884d8" />
       <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
       <XAxis dataKey="id" />
