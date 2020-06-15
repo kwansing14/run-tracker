@@ -11,13 +11,22 @@
     "@rails/webpacker": "4.2.2",
     "axios": "^0.19.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "moment": "^2.26.0",
+    "parse-ms": "^2.1.0",
     "pretty-ms": "^7.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-swipeable-tab": "^0.1.1",
+    "react-swipeable-views": "^0.13.9",
+    "react-tabs": "^3.1.1",
+    "recharts": "^1.8.5",
+    "time-convert": "^0.0.2"
   },
   "version": "0.1.0",
   "devDependencies": {
+    "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0"
   }
 }
