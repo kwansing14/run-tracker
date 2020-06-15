@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Pacings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Body</th>
+      <th>User</th>
+      <th>Run logs</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pacings.each do |pacing| %>
+      <tr>
+        <td><%= pacing.body %></td>
+        <td><%= pacing.user_id %></td>
+        <td><%= pacing.run_logs_id %></td>
+        <td><%= link_to 'Show', pacing %></td>
+        <td><%= link_to 'Edit', edit_pacing_path(pacing) %></td>
+        <td><%= link_to 'Destroy', pacing, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pacing', new_pacing_path %>

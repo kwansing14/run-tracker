@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_14_162558) do
+ActiveRecord::Schema.define(version: 2020_06_15_172216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "pacings", force: :cascade do |t|
+    t.float "body"
+    t.bigint "user_id", null: false
+    t.bigint "run_log_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["run_log_id"], name: "index_pacings_on_run_log_id"
+    t.index ["user_id"], name: "index_pacings_on_user_id"
+  end
 
   create_table "run_logs", force: :cascade do |t|
     t.float "distance"
@@ -37,5 +47,7 @@ ActiveRecord::Schema.define(version: 2020_06_14_162558) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "pacings", "run_logs"
+  add_foreign_key "pacings", "users"
   add_foreign_key "run_logs", "users"
 end

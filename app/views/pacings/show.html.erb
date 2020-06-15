@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Body:</strong>
+  <%= @pacing.body %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @pacing.user_id %>
+</p>
+
+<p>
+  <strong>Run logs:</strong>
+  <%= @pacing.run_logs_id %>
+</p>
+
+<%= link_to 'Edit', edit_pacing_path(@pacing) %> |
+<%= link_to 'Back', pacings_path %>

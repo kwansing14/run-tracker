@@ -1,0 +1,32 @@
+<%= form_with(model: pacing, local: true) do |form| %>
+  <% if pacing.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(pacing.errors.count, "error") %> prohibited this pacing from being saved:</h2>
+
+      <ul>
+        <% pacing.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :body %>
+    <%= form.text_field :body %>
+  </div>
+
+  <div class="field">
+    <%= form.label :user_id %>
+    <%= form.text_field :user_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :run_logs_id %>
+    <%= form.text_field :run_logs_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

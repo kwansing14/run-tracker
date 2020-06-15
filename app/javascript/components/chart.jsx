@@ -1,45 +1,81 @@
 import React from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+import axios from 'axios';
+import moment from 'moment';
+
+import { LineChart, Line, CartesianGrid, XAxis, YAxis ,Tooltip } from 'recharts';
 
 class Chart extends React.Component {
-  render() {
 
-  const data = [
-    {
-      name: 'Page A', uv: 1000, amt: 2400,
-    },
-    {
-      name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
-    },
-    {
-      name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
-    },
-    {
-      name: 'Page D', uv: 2780, pv: 3908, amt: 2000,
-    },
-    {
-      name: 'Page E', uv: 1890, pv: 4800, amt: 2181,
-    },
-    {
-      name: 'Page F', uv: 2390, pv: 3800, amt: 2500,
-    },
-    {
-      name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
-    },
-  ];
+  constructor(){
+    super()
+    this.state = {
+      data2:'',
+    }
+  }
+
+  componentDidMount(){
+    const url = '/run_logs.json';
+    axios.get(url)
+      .then((response) => {
+        console.log(response.data)
+        console.log(response.data.length)
+        this.setState({data2: response.data})
+      }).catch((error)=>{
+        console.log(error);
+      })
+    console.log('data2')
+    console.log(this.state.data2);
+  }
+
+  render() {
+    for(let i=0; i<this.state.data2.length; i++) {
+      this.state.data2[i].id = i+1+'.';
+    }
+    console.log(this.state.data2);
+
 
   const renderLineChart = (
-    <LineChart width={600} height={300} data={data}>
-      <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-      <CartesianGrid stroke="#ccc" />
-      <XAxis dataKey="name" />
+    <LineChart width={300} height={170} data={this.state.data2} style={{marginTop:'5px',transform:'translateX(-25px)'}}>
+      <Line type="monotone" dataKey="pace" stroke="#8884d8" />
+      <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
+      <XAxis dataKey="id" />
+      <YAxis />
+    </LineChart>
+  );
+
+  const renderLineChart2 = (
+    <LineChart width={300} height={170} data={this.state.data2} style={{marginTop:'5px',transform:'translateX(-25px)'}}>
+      <Line type="monotone" dataKey="distance" stroke="#8884d8" />
+      <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
+      <XAxis dataKey="id" />
       <YAxis />
     </LineChart>
   );
 
   return (
       <div>
-        {renderLineChart};
+        <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px 0', margin:'10px 0',width:'98%'}}>
+          Average pace
+        </div>
+        <div>
+          Ave. Pace(min/km)
+        <br/>
+        </div>
+        <div>
+          {renderLineChart}
+        </div>
+        <div style={{textAlign:'center',transform:'translateY(-10px)'}}>Index</div>
+        <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px 0', margin:'10px 0',width:'98%'}}>
+          Distance
+        </div>
+        <div>
+          Distance(km)
+        <br/>
+        </div>
+        <div>
+          {renderLineChart2}
+        </div>
+        <div style={{textAlign:'center',transform:'translateY(-10px)'}}>Index</div>
       </div>
     );
   }

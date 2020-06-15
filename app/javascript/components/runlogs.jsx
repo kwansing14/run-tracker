@@ -1,6 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import ms from 'pretty-ms';
+import mstwo from 'parse-ms';
+import moment from 'moment';
+
 
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
@@ -15,7 +18,6 @@ class Runlogs extends React.Component {
     this.state={
       logs:[],
       temp:[],
-      pace:0,
     }
   }
 
@@ -24,6 +26,8 @@ class Runlogs extends React.Component {
     const url = '/run_logs.json';
     axios.get(url)
       .then((response) => {
+        console.log(response.data)
+        console.log(response.data.length)
         this.setState({ logs: response.data })
       }).catch((error)=>{
         console.log(error);
@@ -44,17 +48,21 @@ class Runlogs extends React.Component {
 
   render() {
     console.log("refresh logs")
+    console.log("this.state.logs")
+
     let logs;
     if(this.state.logs != undefined) {
       logs = this.state.logs.map((log, index)=>{
         return (
           <span key={log.id}>
-            <ListItem disableRipple button style={{width:'100%'}}>
+            <ListItem id={log.id} disableRipple button style={{width:'100%', height:'100%'}}>
               <Grid item xs={2}>{index+1}.
               </Grid>
               <Grid item xs={9}>
-                <div>time: {ms(log.time)}</div>
-                <div>distance: {(log.distance).toFixed(2)}Km</div>
+                <div>{moment.utc(log.created_at).format('LLL')}</div>
+                <div>Time: {ms(log.time)}</div>
+                <div>Distance: {(log.distance).toFixed(2)}Km</div>
+                <div>Average pace: {log.pace}</div>
               </Grid>
               <Grid item xs={1} container justify='flex-end'>
                 <Button style={{minWidth: '30px'}}id={log.id} onClick={(event)=>{this.delbtn(event)}}><CloseIcon fontSize="small" /></Button>
@@ -68,8 +76,8 @@ class Runlogs extends React.Component {
 
     return (
       <div>
-        <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px', margin:'10px 2px'}}>Running Logs</div>
-        {logs}
+        <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px 0', margin:'10px 0'}}>Running Logs</div>
+        <div style={{maxHeight:'500px', overflow:'scroll'}}> {logs} </div>
       </div>
     );
   }

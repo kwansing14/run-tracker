@@ -30,9 +30,8 @@ class Timer extends React.Component {
       time: Date.now() - this.state.start
     }), 1);
     this.pacer = setInterval (()=>{
-      console.log("timer here"+this.state.time)
-      this.props.liftpacer(10000)
-    },10000)
+      this.props.liftpacer(this.state.time)
+    },5000)
   }
   stopTimer() {
     this.props.liftStopTime()

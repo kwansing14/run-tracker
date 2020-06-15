@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  body: 1.5
+  user: one
+  run_logs: one
+
+two:
+  body: 1.5
+  user: two
+  run_logs: two

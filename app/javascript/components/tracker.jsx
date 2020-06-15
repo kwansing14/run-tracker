@@ -4,10 +4,10 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import ms from 'parse-ms';
+import axios from 'axios';
 
 let watchID = null;
 let counter = 1;
-
 class Tracker extends React.Component {
 
   constructor(){
@@ -47,18 +47,18 @@ class Tracker extends React.Component {
       if (dist > 1) {
         dist = 1;
       }
-        dist = Math.acos(dist);
-        dist = dist * 180/Math.PI;
-        dist = dist * 60 * 1.1515;
-        if (unit=="K") { dist = dist * 1.609344 }
-        if (unit=="N") { dist = dist * 0.8684 }
-        console.log('distannceeeeeee'+dist)
-        dist = this.state.distance + dist;
-        this.setState ({
-          distance:dist,
-        })
-        console.log("distance check done")
-        //return dist;
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515;
+      if (unit=="K") { dist = dist * 1.609344 }
+      if (unit=="N") { dist = dist * 0.8684 }
+      console.log('distannceeeeeee'+dist)
+      dist = this.state.distance + dist;
+      this.setState ({
+        distance:dist,
+      })
+      console.log("distance check done")
+      //return dist;
     }
   }
 
@@ -119,20 +119,18 @@ class Tracker extends React.Component {
       console.log("stop successful")
     }
   }
-
   putStartTime(){
     this.updateloc()
   }
-
   putStopTime(){
     this.stop()
   }
-
   putSaveTime(object){
     this.stop()
     object.distance = this.state.distance
+    object.pace = this.state.pacer
     console.log(object)
-    this.props.liftSaveDistance(object)
+    this.props.liftSaveObject(object)
     this.setState({
       distance:0,
       pacer:0,
@@ -140,56 +138,64 @@ class Tracker extends React.Component {
       templat:'',
       templong:'',
       tempDist:0,
-      counter: 0,
+      counter: 1,
     })
   }
 
   putpacer(v){
     //v is milliseconds of every 10 seconds, time can be changed in timer.jsx
-    console.log('putpacer'+v)
+    console.log('putpacer>>>>'+v)
 
     //calculate average pace
-    let x = (1/this.state.distance)*(v*(this.state.counter))
-    console.log(this.state.counter)
-    this.setState({
-      pacer:x,
-      counter: this.state.counter+1})
+    let x = (1/this.state.distance)*(v)
+    console.log('x')
+    console.log(x)
+    console.log('v')
+    console.log(v)
+
+    let aP = ms(x)
+    // if(x == Infinity || this.state.distance == 0){
+    //   aP.minutes = 0;
+    //   aP.seconds = '00';
+    // }
+    if (aP.seconds.length == 1) {
+      aP.seconds = "0"+aP.seconds
+    }
 
     //calculate current pace
-    let y = (1/(this.state.distance - this.state.tempDist))*v
-        if (y == Infinity) {
-      y = 0;
+    let y = (1/(this.state.distance - this.state.tempDist))*5000
+    let cP = ms(y)
+
+    // if(y == Infinity || v == 0) {
+    //   cP.minutes = 0;
+    //   cP.seconds = '00';
+    // }
+    if (cP.seconds.length == 1) {
+      cP.seconds = "0"+cP.seconds
     }
+    if (y==Infinity) {
+      y=0;
+    }
+
     this.setState({
       tempDist: this.state.distance,
-      currentPace: y,
+      currentPace: cP.minutes+"."+cP.seconds,
+      pacer: aP.minutes+"."+aP.seconds,
+      counter: this.state.counter+1
     })
   }
 
-  testing(){
-    if (this.state.testing == true) {
-      this.setState({testing:false})
-    }
-    else { this.setState({testing:true}) }
-  }
-
     render() {
-      let cP = ms(this.state.currentPace)
-      let aP = ms(this.state.pacer)
-      if(this.state.currentPace == 0) {
-        cP.minutes = 0;
-        cP.seconds = '00';
-      }
+      console.log('this.state.pacer')
+      console.log(this.state.pacer)
+      console.log('this.state.currentPace')
+      console.log(this.state.currentPace)
 
-      if(this.state.pacer == Infinity || this.state.pacer == 0){
-        aP.minutes = 0;
-        aP.seconds = '00';
+      if (this.state.currentPace == 0 || this.state.currentPace == 'NaN.NaN') {
+        this.state.currentPace = '0.00'
       }
-      if (aP.seconds.length == 1) {
-        aP.seconds = "0"+aP.seconds
-      }
-      if (cP.seconds.length == 1) {
-        cP.seconds = "0"+cP.seconds
+      if (this.state.pacer == 0 || this.state.pacer == 'NaN.NaN') {
+        this.state.pacer = '0.00'
       }
 
     return (
@@ -210,7 +216,7 @@ class Tracker extends React.Component {
           </div>
           <Grid container className='stats'>
             <Grid item xs={3}></Grid>
-            <Grid item xs={6} style={{textAlign:'center'}}>{cP.minutes}.{cP.seconds}</Grid>
+            <Grid item xs={6} style={{textAlign:'center'}}>{this.state.currentPace}</Grid>
             <Grid item xs={3}><span style={{fontSize:'12px'}}>min/km</span></Grid>
           </Grid>
         </Grid>
@@ -221,7 +227,7 @@ class Tracker extends React.Component {
 
           <Grid container className='stats'>
             <Grid item xs={3}></Grid>
-            <Grid item xs={6} style={{textAlign:'center'}}>{aP.minutes}.{aP.seconds}</Grid>
+            <Grid item xs={6} style={{textAlign:'center'}}>{this.state.pacer}</Grid>
             <Grid item xs={3}><span style={{fontSize:'12px'}}>min/km</span></Grid>
           </Grid>
         </Grid>
