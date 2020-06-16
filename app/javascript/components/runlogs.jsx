@@ -75,7 +75,7 @@ class Runlogs extends React.Component {
               <Grid item xs={2}>{index+1}.
               </Grid>
               <Grid item xs={9}>
-                <div>{moment.utc(log.created_at).format('LLL')}</div>
+                <div>{moment.utc(log.created_at).local().format('LLL')}</div>
                 <div>Time: {ms(log.time)}</div>
                 <div>Distance: {(log.distance).toFixed(2)}Km</div>
                 <div>Average pace: {log.pace}</div>
