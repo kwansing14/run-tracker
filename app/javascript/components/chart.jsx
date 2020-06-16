@@ -50,7 +50,7 @@ class Chart extends React.Component {
     }
 
     for(let i=0; i<this.state.data3.length; i++) {
-      this.state.data3[i].id = i+1+'.';
+      this.state.data3[i].id = (i+1)*0.5;
 
       let cP = ms(parseInt(this.state.data3[i].body))
       if (cP.seconds.length == 1) {
@@ -92,7 +92,7 @@ class Chart extends React.Component {
       <div style={{maxHeight:'600px', overflow:'scroll'}}>
         {/* Single run table*/}
         <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px 0', margin:'10px 0',width:'98%'}}>
-          Paces during selected run
+          Average pace for 1 run
         </div>
         <div>
           Ave. Pace(min/km)
@@ -101,11 +101,13 @@ class Chart extends React.Component {
         <div>
           {renderLineChart3}
         </div>
-        <div style={{textAlign:'center',transform:'translateY(-10px)'}}>Index</div>
+        <div style={{textAlign:'center',transform:'translateY(-10px)'}}>
+          Minutes
+        </div>
 
         {/* Average pace table*/}
         <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px 0', margin:'10px 0',width:'98%'}}>
-          Average pace
+          Overall average pace
         </div>
         <div>
           Ave. Pace(min/km)
@@ -118,7 +120,7 @@ class Chart extends React.Component {
 
         {/* Distance table*/}
         <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px 0', margin:'10px 0',width:'98%'}}>
-          Distance
+          Overall distance
         </div>
         <div>
           Distance(km)

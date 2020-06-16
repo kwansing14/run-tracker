@@ -170,7 +170,7 @@ class Tracker extends React.Component {
     }
 
     //calculate current pace
-    let y = (1/(this.state.distance - this.state.tempDist))*5000
+    let y = (1/(this.state.distance - this.state.tempDist))*30000
     let cP = ms(y)
 
     // if(y == Infinity || v == 0) {

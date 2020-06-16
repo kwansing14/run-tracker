@@ -31,7 +31,7 @@ class Timer extends React.Component {
     }), 1);
     this.pacer = setInterval (()=>{
       this.props.liftpacer(this.state.time)
-    },5000)
+    },30000)
   }
   stopTimer() {
     this.props.liftStopTime()
