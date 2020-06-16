@@ -5,7 +5,7 @@ class PacingsController < ApplicationController
   # GET /pacings
   # GET /pacings.json
   def index
-    @pacings = Pacing.all
+    @pacings = Pacing.where(run_log_id: (params[:run_log_id]),user_id: current_user.id)
   end
 
   # GET /pacings/1
@@ -35,6 +35,7 @@ class PacingsController < ApplicationController
         format.json { render :show, status: :created, location: @pacing }
         return
       else
+        byebug
         format.html { render :new }
         format.json { render json: @pacing.errors, status: :unprocessable_entity }
       end
@@ -48,6 +49,7 @@ class PacingsController < ApplicationController
       if @pacing.update(pacing_params)
         format.html { redirect_to @pacing, notice: 'Pacing was successfully updated.' }
         format.json { render :show, status: :ok, location: @pacing }
+        return
       else
         format.html { render :edit }
         format.json { render json: @pacing.errors, status: :unprocessable_entity }

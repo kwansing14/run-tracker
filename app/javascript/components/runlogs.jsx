@@ -10,6 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import CloseIcon from '@material-ui/icons/Close';
+import TimelineIcon from '@material-ui/icons/Timeline';
 
 class Runlogs extends React.Component {
 
@@ -38,12 +39,27 @@ class Runlogs extends React.Component {
   postrequest = async(object) => {
     let res = await axios.post('/run_logs.json', object)
     this.componentDidMount();
+    let logid = await axios.get('./run_logs.json')
+    console.log('login id')
+    const newid = (logid.data[logid.data.length-1].id)
+    console.log(object.arrayPace)
+    object.arrayPace.forEach((elem)=> {
+      axios.post('/pacings', {
+        body: elem,
+        run_log_id: newid
+      })
+    })
   }
 
   //axios deleting each logs
   delbtn = async(event) =>{
     let res = await axios.delete("/run_logs/"+event.currentTarget.id+".json")
     this.componentDidMount();
+  }
+
+  //show chart
+  chart(event){
+    this.props.liftChart(event.currentTarget.id)
   }
 
   render() {
@@ -66,6 +82,7 @@ class Runlogs extends React.Component {
               </Grid>
               <Grid item xs={1} container justify='flex-end'>
                 <Button style={{minWidth: '30px'}}id={log.id} onClick={(event)=>{this.delbtn(event)}}><CloseIcon fontSize="small" /></Button>
+                <Button style={{minWidth: '30px'}}id={log.id} onClick={(event)=>{this.chart(event)}}><TimelineIcon fontSize="small" /></Button>
               </Grid>
             </ListItem>
             <Divider/>
@@ -77,7 +94,7 @@ class Runlogs extends React.Component {
     return (
       <div>
         <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px 0', margin:'10px 0'}}>Running Logs</div>
-        <div style={{maxHeight:'500px', overflow:'scroll'}}> {logs} </div>
+        <div style={{maxHeight:'600px', overflow:'scroll'}}> {logs} </div>
       </div>
     );
   }

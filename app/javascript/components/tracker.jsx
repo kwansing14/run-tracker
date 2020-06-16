@@ -8,6 +8,8 @@ import axios from 'axios';
 
 let watchID = null;
 let counter = 1;
+let seconds = 0;
+
 class Tracker extends React.Component {
 
   constructor(){
@@ -21,6 +23,9 @@ class Tracker extends React.Component {
       pacer:0,
       currentPace:0,
       tempDist:0,
+      arrayPace:[],
+      fiveSecs:[],
+      logID:'',
     }
   }
 
@@ -129,6 +134,8 @@ class Tracker extends React.Component {
     this.stop()
     object.distance = this.state.distance
     object.pace = this.state.pacer
+    object.arrayPace = this.state.arrayPace
+
     console.log(object)
     this.props.liftSaveObject(object)
     this.setState({
@@ -176,12 +183,20 @@ class Tracker extends React.Component {
     if (y==Infinity) {
       y=0;
     }
-
+    seconds = seconds+5;
     this.setState({
       tempDist: this.state.distance,
       currentPace: cP.minutes+"."+cP.seconds,
       pacer: aP.minutes+"."+aP.seconds,
-      counter: this.state.counter+1
+      counter: this.state.counter+1,
+      arrayPace: [y,...this.state.arrayPace],
+      fiveSecs: [seconds,...this.state.fiveSecs]
+    })
+  }
+
+  componentDidMount(){
+    this.setState({
+      logID:1,
     })
   }
 
@@ -190,6 +205,12 @@ class Tracker extends React.Component {
       console.log(this.state.pacer)
       console.log('this.state.currentPace')
       console.log(this.state.currentPace)
+      console.log('this.state.arrayPace')
+      console.log(this.state.arrayPace)
+      console.log('this.state.fiveSecs')
+      console.log(this.state.fiveSecs)
+
+
 
       if (this.state.currentPace == 0 || this.state.currentPace == 'NaN.NaN') {
         this.state.currentPace = '0.00'

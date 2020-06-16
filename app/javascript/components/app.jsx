@@ -29,7 +29,9 @@ class App extends React.Component {
       time:v,
       distance:0,
       pace:0,
-      currentPace:[],
+      arrayPace:[],
+      arrayTime:[],
+      logsID:'',
     }
     this.refs.putTracker.putSaveTime(object);
     this.setState({
@@ -59,6 +61,15 @@ class App extends React.Component {
   }
   liftStopTimerbtn(){
     this.refs.putTimer.stopTimer()
+  }
+  liftChart(v){
+    console.log('chart lifting')
+    console.log(v)
+    this.setState({
+      tab1_activeIndex: 2
+    });
+    console.log('CHANGEd')
+    this.refs.chart.componentDidMount(v)
   }
   click(){
     //this.refs.chart.componentDidMount()
@@ -114,8 +125,10 @@ class App extends React.Component {
                   </Grid>
                 </Grid>
               </Panel>
-              <Panel id='panel2' style={{overflow:'scroll'}}>
-                <Runlogs ref='putrunlogs'/>
+              <Panel id='panel2'>
+                <Runlogs
+                  ref='putrunlogs'
+                  liftChart={(v)=>{this.liftChart(v)}}/>
               </Panel>
               <Panel id='panel3'>
                 <Chart ref='chart'/>
