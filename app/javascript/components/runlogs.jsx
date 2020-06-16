@@ -94,7 +94,7 @@ class Runlogs extends React.Component {
     return (
       <div>
         <div className='bb' style={{textAlign:'center',fontSize:'20px',padding:'10px 0', margin:'10px 0'}}>Running Logs</div>
-        <div style={{maxHeight:'600px', overflow:'scroll'}}> {logs} </div>
+        <div style={{maxHeight:'500px', overflow:'scroll'}}> {logs} </div>
       </div>
     );
   }
